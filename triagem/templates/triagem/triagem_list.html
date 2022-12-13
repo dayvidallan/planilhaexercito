@@ -1,0 +1,85 @@
+{% extends 'core/base.html' %}
+{% load bootstrap3 %}
+
+{% block title %}
+	<CENTER>CONTROLE DE ATENDIMENTOS - ODONTOCLÍNICA - {%now "Y"%}</CENTER>
+{% endblock %}
+
+{% block content %}
+	<div class="panel panel-default">
+	  <div class="panel-body">
+		<a href="{% url 'triagem_create' %}" class="btn btn-md btn-primary">{% bootstrap_icon 'floppy-disk' %} Registrar uma triagem</a>
+		<a href="{% url 'triagem_minhas_unidades' %}" class="btn btn-md btn-primary">{% bootstrap_icon 'list' %} Minhas triagens</a>
+	  </div>
+	</div>
+	<table class="table table-hover">
+  		<thead>
+			<th>Data</th>
+			<th>Paciente</th>
+			<th>Categoria de Atend</th>
+			<th>Idade</th>
+			<th>PREC CP</th>
+			<th>Situação Mil</th>
+			<th>Pront</th>
+			<th>RX</th>
+			<th>Procedimento</th>
+			<th>Alta</th>
+			<th>CDM</th>
+			<th>Valor</th>
+  			<th class="text-center">Editar</th>
+  			<th class="text-center">Excluir</th>
+  		</thead>
+
+  		<tbody>
+  			{% for triagem in object_list %}
+				<tr>
+					<td>{{ triagem.data|date:'d/m/Y' }}</td>
+					<td>{{ triagem.paciente }}</td>
+
+					{% if  triagem.urgencia %}
+						<td>
+							<span class="badge badge-danger">Urgênte</span>
+						</td>
+					{% else %}
+						<td>-</td>
+					{% endif %}
+
+					<td>{{ triagem.idade }}</td>
+					<td>{{ triagem.prec }}</td>
+					<td>{{ triagem.categoria }}</td>
+					<td>{{ triagem.pront }}</td>
+					{% if  triagem.rx %}
+						<td>
+							{% bootstrap_icon 'ok' size='sm' %}
+						</td>
+					{% else %}
+						<td>
+							{% bootstrap_icon 'remove' size='sm' %}
+						</td>
+					{% endif %}
+					<td>{{ triagem.proncedimento }}</td>
+					{% if  triagem.alta %}
+						<td>
+							{% bootstrap_icon 'ok' size='sm' %}
+						</td>
+					{% else %}
+							<td>
+							{% bootstrap_icon 'remove' size='sm' %}
+						</td>
+					{% endif %}
+					<td>{{ triagem.cdm }}</td>
+					<td>R$ {{ triagem.valor }}</td>
+					<!--<td>{{ triagem.imc|floatformat:2  }}</td>
+					<td>{{ triagem.resultado_literal_triagem }}</td>
+					<td>{{ triagem.resultado_numerico_triagem }}</td>-->
+					<td class="text-center">
+						{% bootstrap_button content='' href=triagem.get_absolute_url button_type='link' icon='edit' button_class='btn btn-primary' size='sm' %}
+					</td>
+					<td class="text-center">
+						{% bootstrap_button content='' href=triagem.get_delete_url button_type='link' icon='trash' button_class='btn btn-danger' size='sm' %}
+					</td>
+				</tr>
+			{% endfor %}
+  		</tbody>
+	</table>
+{% endblock %}
